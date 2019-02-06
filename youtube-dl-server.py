@@ -43,7 +43,8 @@ def q_size():
 def q_put():
     url = request.forms.get("url")
     options = {
-        'format': request.forms.get("format")
+        'format': request.forms.get("format"),
+        'usenetrc': True
     }
 
     if not url:
