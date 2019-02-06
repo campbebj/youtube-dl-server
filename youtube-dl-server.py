@@ -17,7 +17,7 @@ app_defaults = {
     'YDL_EXTRACT_AUDIO_FORMAT': None,
     'YDL_EXTRACT_AUDIO_QUALITY': '192',
     'YDL_RECODE_VIDEO_FORMAT': None,
-    'YDL_OUTPUT_TEMPLATE': '/youtube-dl/%(title)s [%(id)s].%(ext)s',
+    'YDL_OUTPUT_TEMPLATE': '/youtube-dl/%(series)s/S%(season_number)02d/%(series)s - S%(season_number)02dE%(episode_number)02d - %(title)s.%(ext)s',
     'YDL_ARCHIVE_FILE': None,
     'YDL_SERVER_HOST': '0.0.0.0',
     'YDL_SERVER_PORT': 8080,
@@ -43,8 +43,7 @@ def q_size():
 def q_put():
     url = request.forms.get("url")
     options = {
-        'format': request.forms.get("format"),
-        'usenetrc': True
+        'format': request.forms.get("format")
     }
 
     if not url:
@@ -95,10 +94,21 @@ def get_ydl_options(request_options):
         })
 
     return {
-        'format': ydl_vars['YDL_FORMAT'],
+        #hard coded this, maybe ill fix it later.....
+        'format': '(bestvideo+bestaudio/best)[format_id*=en-US]', #ydl_vars['YDL_FORMAT'],
         'postprocessors': postprocessors,
         'outtmpl': ydl_vars['YDL_OUTPUT_TEMPLATE'],
-        'download_archive': ydl_vars['YDL_ARCHIVE_FILE']
+        'download_archive': ydl_vars['YDL_ARCHIVE_FILE'],
+        'usenetrc': True,
+        'subtitleslangs': 'en-US',
+        'ignoreerrors': True,
+        'subtitlesformat': 'best',
+        'external_downloader': 'aria2c',
+        'external_downloader_args': '-x 16',
+        'nooverwrites': True,
+        'embedsubtitles': True,
+        'addmetadata': True,
+        'embedthumbnail': True
     }
 
 
